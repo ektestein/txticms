@@ -1,4 +1,5 @@
 # internal modules
+from abc import abstractmethod
 import argparse
 from os.path import basename, splitext
 from random import random
@@ -14,7 +15,21 @@ import settings
 payload = {'form_level': 2, 'increase_form_level': 'Show+more+options'}
 
 
-class TxtiCms(object):
+class FileHandler(object):
+	@abstractmethod
+	def __create(self):
+		pass
+
+	@abstractmethod
+	def __edit(self):
+		pass
+
+	@abstractmethod
+	def __delete_page(self):
+		pass
+
+
+class TxtiCms(FileHandler):
 	__txti_addr = 'http://txti.es'
 	headers = {
 			'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0',
@@ -63,7 +78,7 @@ class TxtiCms(object):
 	def __edit(self):
 		pass
 
-	def __delete_page(self, instance):
+	def __delete_page(self):
 		pass
 
 
