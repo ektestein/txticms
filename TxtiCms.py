@@ -1,5 +1,5 @@
 # internal modules
-from abc import abstractmethod
+from abc import abstractmethod, abstractstaticmethod
 import argparse
 from os.path import basename, splitext
 from random import random
@@ -20,7 +20,7 @@ class FileHandler(object):
 	def __create(self):
 		pass
 
-	@abstractmethod
+	# @abstractstaticmethod
 	def __edit(self):
 		pass
 
@@ -43,16 +43,17 @@ class TxtiCms(FileHandler):
 	def __init__(self):
 		pass
 
-	@staticmethod
-	def update(path):
-		__class__.__create(path)
+	# @staticmethod
+	def update(self):
+		# __class__.__create(path)
+		self.__edit()
 
 	@staticmethod
 	def __create(path):
 		with open(path) as source:
 			text = source.read()
 
-		custom_url = splitext(basename(path))[0] + '-' + str(random()).rsplit('.', 1)[1]
+		custom_url = splitext(basename(path))[0] + '-' + str(random()).rsplit('.', 1)[1]  # сделать на uuid
 		edit_code = hash(text)
 
 		requests.post(
@@ -75,8 +76,31 @@ class TxtiCms(FileHandler):
 
 		webbrowser.open(__class__.__txti_addr + '/' + custom_url)
 
+	# @staticmethod
 	def __edit(self):
-		pass
+		ans = requests.post(
+			'http://txti.es/testfile-26661296874238893/edit',
+			{
+				# техническая информация
+				'form_level': 3,
+				# 'submit': 'Save+and+done',
+				'update': 'Save+and+done',
+				# содержимое полей
+				'content': 'new content',
+				'custom_url': 'testfile-26661296874238893',
+				# 'custom_edit_code': settings.password,
+				'custom_edit_code': '-3269072730032607315',
+				'title': '',
+				'username': '',
+				'author': settings.author,
+				'description': settings.description,
+				'edit_code': '-3269072730032607315',
+				'original_url': 'testfile-26661296874238893'
+			},
+			headers=TxtiCms.headers)
+		print(ans.text)
+
+	webbrowser.open('http://txti.es/testfile-26661296874238893')
 
 	def __delete_page(self):
 		pass
@@ -87,7 +111,9 @@ if __name__ == '__main__':
 	argparser.add_argument('path', help='Путь до файла, который требуется залить на сайт')
 	path2file = argparser.parse_args().path
 
-	TxtiCms.update(path2file)
+	# TxtiCms.update(path2file)
+	qwe = TxtiCms()
+	qwe.update()
 
 
 __docformat__ = 'restructuredtext ru'
