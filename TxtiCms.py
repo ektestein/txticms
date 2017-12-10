@@ -7,12 +7,10 @@ import webbrowser
 
 # external modules
 import requests
+from telegraph import Telegraph
 
 # project modules
 import settings
-
-
-payload = {'form_level': 2, 'increase_form_level': 'Show+more+options'}
 
 
 class FileHandler(object):
@@ -31,6 +29,7 @@ class FileHandler(object):
 
 class TxtiCms(FileHandler):
 	__txti_addr = 'http://txti.es'
+	# headers = {'user-agent': 'my-app/0.0.1'}
 	headers = {
 			'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0',
 			'Accept': 'text / css, * / *;q = 0.1',
@@ -100,10 +99,14 @@ class TxtiCms(FileHandler):
 			headers=TxtiCms.headers)
 		print(ans.text)
 
-	webbrowser.open('http://txti.es/testfile-26661296874238893')
+		webbrowser.open('http://txti.es/testfile-26661296874238893')
 
 	def __delete_page(self):
 		pass
+
+
+class TelegraphCms(FileHandler):
+	pass
 
 
 if __name__ == '__main__':
@@ -111,9 +114,20 @@ if __name__ == '__main__':
 	argparser.add_argument('path', help='Путь до файла, который требуется залить на сайт')
 	path2file = argparser.parse_args().path
 
-	# TxtiCms.update(path2file)
-	qwe = TxtiCms()
-	qwe.update()
+	telegraph = Telegraph()
+
+	telegraph.create_account(short_name='1338')
+
+	# response = telegraph.create_page(
+	# 	'Hey',
+	# 	html_content='<p>Hello, world!</p>'
+	# )
+	# response = telegraph.edit_page('http://telegra.ph/Hey-12-07-3', 'Hey', 'smth new')
+	# print('http://telegra.ph/{}'.format(response['path']))
+	# print(111)
+	# print(telegraph.get_page('http://telegra.ph/Hey-12-07-3', True))
+	# print(telegraph.get_page('api', True))
+	print(telegraph.get_page('api', False))
 
 
 __docformat__ = 'restructuredtext ru'
